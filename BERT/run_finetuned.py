@@ -12,7 +12,11 @@ from datasets import load_dataset
 import torch
 import numpy as np
 import csv
+import sys
+import os
 from csv import writer
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
 #Pre-trained and fine-tuned Model and tokenizer import
 model_name = "./bert-base-cased"
@@ -45,7 +49,7 @@ trainer = Trainer(
     compute_metrics = compute_metrics
 )
 
-text = input("Enter the text: ")
+text = sys.argv[1]
   
 List=[text]
 List2=['excerpt']
@@ -67,9 +71,6 @@ test_dataset = test_dataset['train']
 output = trainer.predict(test_dataset)
 target = output.predictions.squeeze()
 
-print('Score calculated')
-print(target)
-
 #Below code from here cleans up the csv file for the next
 #program execution.
 imp = open('test.csv' , 'rb')
@@ -84,3 +85,6 @@ for row in csv.reader(imp):
 
   imp.close()
   out.close()
+
+  
+print(target)
