@@ -11,7 +11,6 @@ app.post('/', (req, res) => {
     console.log(JSON.stringify(req.body.text)) 
     python.stdout.on('data', (data) => {
       console.log('Pipe data from python script ...');
-      console.log(data)
       const result = data.toString();
       res.send(data);
     });
