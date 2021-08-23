@@ -20,12 +20,9 @@ const FileUpload = () => {
                 </div>
             </div>
             <br/>
-            <input id="real-input" className="input-submit" type="submit" name="submit" value="READ!"/>
-            <div className="box-1">
-                <div className="btn btn-one">
-                    <input className="input-submit" type="submit" name="submit" value="READ!"/>
-                </div>
-            </div>
+            <button className="input-submit" value="BUTTON"> 
+                    <div className="box-1"><div className="btn btn-one"> <span>READ!</span> </div>  </div>
+            </button>
         </form>
     )
 }

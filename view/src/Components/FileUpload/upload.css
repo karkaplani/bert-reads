@@ -62,6 +62,7 @@
   text-align: top;
 }
 
+/*Make that button clickable from the nested divs*/
 .input-submit {
   background-color: rgb(255, 150, 102);
   border: none;
