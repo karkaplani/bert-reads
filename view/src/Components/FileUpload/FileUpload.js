@@ -1,21 +1,15 @@
 import React from 'react'
-import { useForm } from 'react-hook-form'
 import './upload.css'
 
-const FileUpload = () => {
-    const { register, handleSubmit } = useForm()
-    const testSubmit = (data) => {
-        console.log(data)
-        console.log("Submitted")
-    }
+const FileUpload = ({displayResult, changeHandler}) => {
     //Write the uploaded file content to the textarea
     return (
-        <form onSubmit={handleSubmit((data) => {testSubmit(data)})}>
+        <form method="post" onSubmit={displayResult}>
             <br /><br />
-            <textarea className="input-text" type="text" {...register('text')}/> <br /> <br />
+            <textarea className="input-text" type="text" /> <br /> <br />
             <div className="wrapper">
                 <div className="file-upload">
-                <input type="file" accept=".doc, .txt" name="text" {...register('text')}/>
+                <input type="file" accept=".doc, .txt" name="file" onChange={changeHandler}/>
                     <i className="fa fa-arrow-up"></i>
                 </div>
             </div>
