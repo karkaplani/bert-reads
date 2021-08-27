@@ -40,7 +40,7 @@ from csv import writer
 import sys
 from contextlib import contextmanager
 
-text = sys.argv[1]
+# text = sys.argv[1]
 
 set_global_logging_level(logging.ERROR, ["transformers", "torch", "datasets", "csv", "numpy", "Trainer"])
 
@@ -55,11 +55,11 @@ def suppress_stdout():
             sys.stdout = old_stdout
 
 # # Pre-trained and fine-tuned Model and tokenizer import
-model_name = "./bert-base-cased"
+model_name = "../BERT/bert-base-cased"
 tokenizer = BertTokenizer.from_pretrained(model_name)
 
 # # Adjusting the model to load and use it for this runtime
-model_fn = './bert-base-cased/pytorch_model.bin'
+model_fn = '../BERT/bert-base-cased/pytorch_model.bin'
 model_state_dict = torch.load(model_fn,
                               map_location=torch.device('cpu'))  # No need for map_location while using at a notebook
 model = BertForSequenceClassification.from_pretrained(model_name, state_dict=model_state_dict, num_labels=1)
@@ -98,14 +98,14 @@ def calculate_target(text):
     List=[text]
     List2=['excerpt']
 
-    with open('test.csv', 'a') as f_object:
+    with open('../BERT/test.csv', 'a') as f_object:
         writer_object = writer(f_object)
         writer_object.writerow(List2)
         writer_object.writerow(List)
         f_object.close()
 
     with suppress_stdout():
-        test = load_dataset('csv', data_files=['./test.csv'])
+        test = load_dataset('csv', data_files=['../BERT/test.csv'])
         test_dataset = test.map(tokenize, batched=True)
         test_dataset = test_dataset.remove_columns(['excerpt'])
         test_dataset = test_dataset['train']
@@ -113,14 +113,14 @@ def calculate_target(text):
     output = trainer.predict(test_dataset)
     target = output.predictions.squeeze()
 
-    clean_file()
-    return target
+    clean_file(text)
+    return str(target)
 
 # # Below code from here cleans up the csv file for the next
 # # program execution.
-def clean_file():
-    imp = open('test.csv', 'rb')
-    out = open('test.csv', 'wb')
+def clean_file(text):
+    imp = open('../BERT/test.csv', 'rb')
+    out = open('../BERT/test.csv', 'wb')
 
     writer = csv.writer(out)
 
@@ -132,11 +132,6 @@ def clean_file():
     imp.close()
     out.close()
 
-def ananinami(text):
-    return text
-
-print(ananinami(text))
-# print(calculate_target(text))
 
 # import sys
 # text = sys.argv[1]
