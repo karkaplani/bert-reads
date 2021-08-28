@@ -115,6 +115,7 @@ def calculate_target(text):
 
     clean_file(text)
     target = (3 + (1.386119 - target) / 0.483295)
+    target = round(target)
     return str(target)
 
 # # Below code from here cleans up the csv file for the next

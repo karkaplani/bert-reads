@@ -10,6 +10,4 @@ def start_server(host_ip, debug_mode):
 def hello_world():
     file_content = request.files['file'].read()
     file_content = file_content.decode("utf-8")
-    # return 'anan'
-    print(file_content)
     return str(calculate_target(file_content))
