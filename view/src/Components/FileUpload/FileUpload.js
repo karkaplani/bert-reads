@@ -1,15 +1,15 @@
 import React from 'react'
 import './upload.css'
 
-const FileUpload = ({displayResult, changeHandler}) => {
+const FileUpload = ({displayResult, fileChangeHandler, textChangeHandler}) => {
     //Write the uploaded file content to the textarea
     return (
         <form method="post" onSubmit={displayResult}>
             <br /><br />
-            <textarea className="input-text" type="text" /> <br /> <br />
+            <textarea className="input-text" type="text" onChange={textChangeHandler}/> <br /> <br />
             <div className="wrapper">
                 <div className="file-upload">
-                <input type="file" accept=".doc, .txt" name="file" onChange={changeHandler}/>
+                <input type="file" accept=".doc, .txt" name="file" onChange={fileChangeHandler}/>
                     <i className="fa fa-arrow-up"></i>
                 </div>
             </div>

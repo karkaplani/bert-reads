@@ -7,7 +7,12 @@ def start_server(host_ip, debug_mode):
     app.run(host=host_ip, debug=debug_mode)
 
 @app.route("/api/uploads", methods = ['POST'])
-def hello_world():
-    file_content = request.files['file'].read()
-    file_content = file_content.decode("utf-8")
-    return str(calculate_target(file_content))
+def return_result():
+    text_to_send = None
+    if request.is_json:
+        text_to_send = request.json['text']
+    else:
+        file_content = request.files['file'].read()  
+        text_to_send = file_content.decode("utf-8")
+    # return 'annen'
+    return str(calculate_target(text_to_send))

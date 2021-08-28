@@ -8,26 +8,41 @@ import axios from 'axios'
 
 const App = () => {
   const [selectedFile, setSelectedFile] = useState()
+  const [text, setText] = useState()
   const [scoreVisible, setScoreVisible] = useState(false)
   const [score, setScore] = useState(0)
   const [loadingActive, setLoadingActive] = useState(false)
-
-  const annen = 0
   
-  const changeHandler = (event) => {
-    setSelectedFile(event.target.files[0])
+  const fileChangeHandler = (event) => {
+      setSelectedFile(event.target.files[0])
+  }
+
+  const textChangeHandler = (event) => {
+    setText(event.target.value)
+  }
+
+  const setDataToUse = () => {
+    let data 
+    if(selectedFile !== undefined) {
+      data = new FormData()
+      data.append('file', selectedFile)
+    } else {
+      // data = text
+      data = {
+        'text': text
+      }
+    }
+    return data
   }
 
   const displayResult = (event) => {
     event.preventDefault()
 
-    const data = new FormData()
-
-    data.append('file', selectedFile)
+    const data = setDataToUse()
+    console.log(data)
 
     axios.post('api/uploads', data)
       .then((response) => {
-        console.log(response.data)
         setLoadingActive(false)
         setScore(response.data)
         setScoreVisible(true)
@@ -41,9 +56,9 @@ const App = () => {
 
   return (
     <div>
-      <Upload displayResult={displayResult} changeHandler={changeHandler}/> <br />
+      <Upload displayResult={displayResult} fileChangeHandler={fileChangeHandler} textChangeHandler={textChangeHandler}/> <br />
       {loadingActive && <Loading/>}
-      {scoreVisible && <Result score={score} annen={annen}/>}
+      {scoreVisible && <Result score={score}/>}
       <img src={bert_image} alt="BERT"/>
     </div>
   )

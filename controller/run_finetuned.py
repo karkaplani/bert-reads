@@ -7,29 +7,6 @@
 # # and finally returns the result to the user.
 # # '''
 
-import logging
-import re
-def set_global_logging_level(level=logging.ERROR, prefices=[""]):
-    """
-    Override logging levels of different modules based on their name as a prefix.
-    It needs to be invoked after the modules have been loaded so that their loggers have been initialized.
-
-    Args:
-        - level: desired level. e.g. logging.INFO. Optional. Default is logging.ERROR
-        - prefices: list of one or more str prefices to match (e.g. ["transformers", "torch"]). Optional.
-          Default is `[""]` to match all active loggers.
-          The match is a case-sensitive `module_name.startswith(prefix)`
-    """
-    prefix_re = re.compile(fr'^(?:{ "|".join(prefices) })')
-    for name in logging.root.manager.loggerDict:
-        if re.match(prefix_re, name):
-            logging.getLogger(name).setLevel(level)
-
-
-import os
-
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
-
 from transformers import BertTokenizer, BertForSequenceClassification
 from transformers import Trainer, TrainingArguments
 from datasets import load_dataset
@@ -39,20 +16,6 @@ import csv
 from csv import writer
 import sys
 from contextlib import contextmanager
-
-# text = sys.argv[1]
-
-set_global_logging_level(logging.ERROR, ["transformers", "torch", "datasets", "csv", "numpy", "Trainer"])
-
-@contextmanager
-def suppress_stdout():
-    with open(os.devnull, "w") as devnull:
-        old_stdout = sys.stdout
-        sys.stdout = devnull
-        try:  
-            yield
-        finally:
-            sys.stdout = old_stdout
 
 # # Pre-trained and fine-tuned Model and tokenizer import
 model_name = "../BERT/bert-base-cased"
@@ -83,12 +46,7 @@ def compute_metrics(eval_pred):
 # # Only the model and the calculation function needed for inference.
 trainer = Trainer(
     model=model,
-    compute_metrics=compute_metrics,
-    args = TrainingArguments(
-        # 'training_args',
-        disable_tqdm=True,
-        output_dir="tmp_trainer"
-    )
+    compute_metrics=compute_metrics
 )
 
 def calculate_target(text):
@@ -104,11 +62,11 @@ def calculate_target(text):
         writer_object.writerow(List)
         f_object.close()
 
-    with suppress_stdout():
-        test = load_dataset('csv', data_files=['../BERT/test.csv'])
-        test_dataset = test.map(tokenize, batched=True)
-        test_dataset = test_dataset.remove_columns(['excerpt'])
-        test_dataset = test_dataset['train']
+
+    test = load_dataset('csv', data_files=['../BERT/test.csv'])
+    test_dataset = test.map(tokenize, batched=True)
+    test_dataset = test_dataset.remove_columns(['excerpt'])
+    test_dataset = test_dataset['train']
     
     output = trainer.predict(test_dataset)
     target = output.predictions.squeeze()
