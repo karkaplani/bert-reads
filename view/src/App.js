@@ -19,8 +19,8 @@ const App = () => {
     data.append('file', selectedFile)
 
     axios.post('api/uploads', data)
-      .then((e) => {
-        console.log('Success')
+      .then((response) => {
+        console.log(response.data)
       })
       .catch((error) =>{
         console.log('Error', error.response.data)

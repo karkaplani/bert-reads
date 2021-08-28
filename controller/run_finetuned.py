@@ -114,6 +114,7 @@ def calculate_target(text):
     target = output.predictions.squeeze()
 
     clean_file(text)
+    target = (3 + (1.386119 - target) / 0.483295)
     return str(target)
 
 # # Below code from here cleans up the csv file for the next
