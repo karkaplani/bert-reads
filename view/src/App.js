@@ -27,7 +27,6 @@ const App = () => {
       data = new FormData()
       data.append('file', selectedFile)
     } else {
-      // data = text
       data = {
         'text': text
       }
