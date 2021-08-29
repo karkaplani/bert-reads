@@ -1,5 +1,6 @@
 from flask import Flask, request
 from run_finetuned import calculate_target
+from run_finetuned import clean_file
 
 app = Flask(__name__)
 
@@ -14,5 +15,9 @@ def return_result():
     else:
         file_content = request.files['file'].read()  
         text_to_send = file_content.decode("utf-8")
-    # return 'annen'
-    return str(calculate_target(text_to_send))
+
+    try:
+        return str(calculate_target(text_to_send))
+    except:
+        clean_file('excerpt')
+        return '/:'

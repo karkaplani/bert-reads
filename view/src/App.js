@@ -12,13 +12,19 @@ const App = () => {
   const [scoreVisible, setScoreVisible] = useState(false)
   const [score, setScore] = useState(0)
   const [loadingActive, setLoadingActive] = useState(false)
+  const [buttonDisabled, setButtonDisabled] = useState(true)
   
   const fileChangeHandler = (event) => {
       setSelectedFile(event.target.files[0])
+      setButtonDisabled(false)
   }
 
   const textChangeHandler = (event) => {
+    if(event.target.value === '') {
+      setButtonDisabled(true)
+    }
     setText(event.target.value)
+    setButtonDisabled(false)
   }
 
   const setDataToUse = () => {
@@ -55,7 +61,11 @@ const App = () => {
 
   return (
     <div>
-      <Upload displayResult={displayResult} fileChangeHandler={fileChangeHandler} textChangeHandler={textChangeHandler}/> <br />
+      <Upload 
+        displayResult={displayResult} 
+        fileChangeHandler={fileChangeHandler} 
+        textChangeHandler={textChangeHandler}
+        buttonDisabled={buttonDisabled} /> <br />
       {loadingActive && <Loading/>}
       {scoreVisible && <Result score={score}/>}
       <img src={bert_image} alt="BERT"/>

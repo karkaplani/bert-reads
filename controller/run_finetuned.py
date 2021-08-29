@@ -14,8 +14,6 @@ import torch
 import numpy as np
 import csv
 from csv import writer
-import sys
-from contextlib import contextmanager
 
 # # Pre-trained and fine-tuned Model and tokenizer import
 model_name = "../BERT/bert-base-cased"
